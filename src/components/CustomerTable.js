@@ -3,6 +3,7 @@ import { customerData } from "../CustomerData";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import { makeStyles } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   customerTable: {
@@ -13,9 +14,7 @@ const useStyles = makeStyles({
       padding: "8px"
     },
     "& tr": {
-      "& hover": {
-        cursor: "pointer"
-      }
+      cursor: "pointer"
     },
     "& tr:nth-child(even)": {
       backgroundColor: "#dddddd"
@@ -31,6 +30,7 @@ const CustomerTable = () => {
   const classes = useStyles();
   const [minOrMax, setMinOrMax] = useState("max");
   const [customerList, setCustomerList] = useState([]);
+  const history = useHistory();
 
   useEffect(() => {
     fetch(`https://intense-tor-76305.herokuapp.com/merchants%60`)
@@ -69,7 +69,7 @@ const CustomerTable = () => {
             <th>Max/Min</th>
           </tr>
           {customerList.map((item) => (
-            <tr key={item.id}>
+            <tr key={item.id} onClick={() => history.push(`/bids/${item.id}`)}>
               <td>{item.firstname + " " + item.lastname}</td>
               <td>{item.email}</td>
               <td>{item.phone}</td>
