@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { customerData } from "../CustomerData";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
@@ -29,10 +29,23 @@ const useStyles = makeStyles({
 const CustomerTable = () => {
   const classes = useStyles();
   const [minOrMax, setisMinOrMax] = useState("max");
+  const [customerList, setCustomerList] = useState([]);
+
+  useEffect(() => {
+    fetch(`https://intense-tor-76305.herokuapp.com/merchants%60`)
+      .then((resp) => resp.json())
+      .then((resp) => {
+        const customerList =
+          resp && Object.keys(resp).length ? resp : customerData;
+        setCustomerList(customerList);
+      });
+  }, []);
   const showMaxBid = (bidsArr) => {
     let max = 0;
     bidsArr.forEach((bid) => {
-      bid.amount > max ? (max = bid.amount) : null;
+      if (bid.amount > max) {
+        max = bid.amount;
+      }
     });
 
     return max;
@@ -41,7 +54,9 @@ const CustomerTable = () => {
   const showMinBid = (bidsArr) => {
     let min = bidsArr[0].amount;
     bidsArr.forEach((bid) => {
-      bid.amount < min ? (min = bid.amount) : null;
+      if (bid.amount < min) {
+        min = bid.amount;
+      }
     });
 
     return min;
@@ -49,6 +64,7 @@ const CustomerTable = () => {
   const handleMinMax = (e, newVal) => {
     setisMinOrMax(newVal);
   };
+
   return (
     <div>
       <div className={classes.tableToolbar}>
@@ -66,7 +82,7 @@ const CustomerTable = () => {
             <th>Premium</th>
             <th>Max/Min</th>
           </tr>
-          {customerData.map((item) => (
+          {customerList.map((item) => (
             <tr key={item.id}>
               <td>{item.firstname + " " + item.lastname}</td>
               <td>{item.email}</td>
