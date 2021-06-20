@@ -1,0 +1,10 @@
+import CustomerTable from "./components/CustomerTable";
+import "./styles.css";
+
+export default function App() {
+  return (
+    <div className="App">
+      <CustomerTable />
+    </div>
+  );
+}
