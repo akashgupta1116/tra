@@ -30,6 +30,7 @@ const CustomerTable = () => {
   const classes = useStyles();
   const [minOrMax, setMinOrMax] = useState("max");
   const [customerList, setCustomerList] = useState([]);
+  const [sortOrder, setSortOrder] = useState(1);
   const history = useHistory();
 
   useEffect(() => {
@@ -43,12 +44,27 @@ const CustomerTable = () => {
       });
   }, []);
   const showBids = (bidsArr) => {
-    const arr = bidsArr.map((obj) => obj.amount);
+    const arr = bidsArr ? bidsArr.map((obj) => obj.amount) : [];
     return Math[minOrMax](...arr);
+  };
+
+  const sortArr = (arr, order) => {
+    const newArr = arr.map((obj) => {
+      const newObj = { ...obj };
+      newObj["sortBid"] = showBids(newObj.bids);
+      return newObj;
+    });
+    return newArr.sort((a, b) => (a.sortBid - b.sortBid) * order);
   };
 
   const handleMinMax = (e, newVal) => {
     setMinOrMax(newVal);
+  };
+
+  const toggleSort = () => {
+    // sorting can be done by clicking on Min col header
+    setSortOrder(sortOrder === 1 ? -1 : 1);
+    setCustomerList(sortArr(customerList, sortOrder));
   };
 
   return (
@@ -66,7 +82,7 @@ const CustomerTable = () => {
             <th>Email</th>
             <th>Phone</th>
             <th>Premium</th>
-            <th>Max/Min</th>
+            <th onClick={toggleSort}>{minOrMax === "min" ? "Min" : "Max"}</th>
           </tr>
           {customerList.map((item) => (
             <tr key={item.id} onClick={() => history.push(`/bids/${item.id}`)}>

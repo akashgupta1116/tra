@@ -29,7 +29,7 @@ export const customerData = [
       {
         id: "bid4",
         carTitle: "",
-        amount: 900000,
+        amount: 9000000,
         created: "4 March 2020"
       }
     ]
