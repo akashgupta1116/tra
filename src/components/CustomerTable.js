@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 
 const CustomerTable = () => {
   const classes = useStyles();
-  const [minOrMax, setisMinOrMax] = useState("max");
+  const [minOrMax, setMinOrMax] = useState("max");
   const [customerList, setCustomerList] = useState([]);
 
   useEffect(() => {
@@ -40,29 +40,13 @@ const CustomerTable = () => {
         setCustomerList(customerList);
       });
   }, []);
-  const showMaxBid = (bidsArr) => {
-    let max = 0;
-    bidsArr.forEach((bid) => {
-      if (bid.amount > max) {
-        max = bid.amount;
-      }
-    });
-
-    return max;
+  const showBids = (bidsArr) => {
+    const arr = bidsArr.map((obj) => obj.amount);
+    return Math[minOrMax](...arr);
   };
 
-  const showMinBid = (bidsArr) => {
-    let min = bidsArr[0].amount;
-    bidsArr.forEach((bid) => {
-      if (bid.amount < min) {
-        min = bid.amount;
-      }
-    });
-
-    return min;
-  };
   const handleMinMax = (e, newVal) => {
-    setisMinOrMax(newVal);
+    setMinOrMax(newVal);
   };
 
   return (
@@ -88,11 +72,7 @@ const CustomerTable = () => {
               <td>{item.email}</td>
               <td>{item.phone}</td>
               <td>{item.hasPremium ? "Yes" : "No"}</td>
-              <td>
-                {minOrMax === "min"
-                  ? showMinBid(item.bids)
-                  : showMaxBid(item.bids)}
-              </td>
+              <td>{showBids(item.bids)}</td>
             </tr>
           ))}
         </tbody>
