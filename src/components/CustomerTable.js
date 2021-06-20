@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles({
   customerTable: {
+    width: "100%",
     "& td,th": {
       border: "1px solid #dddddd",
       textAlign: "left",
@@ -35,6 +36,7 @@ const CustomerTable = () => {
     fetch(`https://intense-tor-76305.herokuapp.com/merchants%60`)
       .then((resp) => resp.json())
       .then((resp) => {
+        // if user could not fetch data then we have added dummy data
         const customerList =
           resp && Object.keys(resp).length ? resp : customerData;
         setCustomerList(customerList);
@@ -50,7 +52,7 @@ const CustomerTable = () => {
   };
 
   return (
-    <div>
+    <div style={{ width: "100vw" }}>
       <div className={classes.tableToolbar}>
         <ToggleButtonGroup value={minOrMax} exclusive onChange={handleMinMax}>
           <ToggleButton value="min">Min</ToggleButton>
